@@ -22,6 +22,8 @@ import lombok.SneakyThrows;
 import okhttp3.mockwebserver.MockResponse;
 import okhttp3.mockwebserver.MockWebServer;
 import okhttp3.mockwebserver.RecordedRequest;
+import org.openqa.selenium.OutputType;
+import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.remote.DesiredCapabilities;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.slf4j.LoggerFactory;
@@ -73,6 +75,16 @@ public class VisualRegressionTrackerTest extends BaseTest {
     public HomeFeature homeFeature;
     int newCommandTimeout = 600;
 
+    public void captureImage(String pageName){
+        String imageBase64 = ((TakesScreenshot) driver).getScreenshotAs(OutputType.BASE64);
+        try {
+            vrt.track(pageName, imageBase64);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
+    }
     @SneakyThrows
     @BeforeMethod
     public void setup() {
@@ -86,7 +98,7 @@ public class VisualRegressionTrackerTest extends BaseTest {
                 "fc387c0b-9fa0-4034-a2ea-ebab1c7e564a",
 
                 // apiKey - copy from user details
-                "F5Z2H0H2SNMXZVHX0EA4YQM1MGDD",
+                "DEFAULTUSERAPIKEYTOBECHANGED",
 
                 // branch - helps to identify version of application under test
                 "master",
